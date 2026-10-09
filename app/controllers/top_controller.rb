@@ -8,10 +8,11 @@ class TopController < ApplicationController
   end
 
   def login
-    # Userモデルから uid と pass が一致するデータを検索
-    user = User.find_by(uid: params[:uid], pass: params[:pass])
+    # ユーザーをDBから検索
+    user = User.find_by(uid: params[:uid])
 
-    if user
+    # ユーザーが存在し、かつ BCrypt で入力パスワードと保存ハッシュを比較
+    if user && BCrypt::Password.new(user.pass) == params[:pass]
       session[:login_uid] = user.uid
       redirect_to top_main_path
     else
