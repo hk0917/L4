@@ -1,6 +1,5 @@
 class TopController < ApplicationController
   def main
-    # session[:login_uid] が存在していれば main.html.erb、無ければ login.html.erb を表示
     if session[:login_uid]
       render "main"
     else
@@ -9,12 +8,19 @@ class TopController < ApplicationController
   end
 
   def login
-    # フォームから送られた params[:uid] と params[:pass] をチェック
-    if params[:uid] == "kindai" && params[:pass] == "sanriko"
-      session[:login_uid] = params[:uid]
+    # Userモデルから uid と pass が一致するデータを検索
+    user = User.find_by(uid: params[:uid], pass: params[:pass])
+
+    if user
+      session[:login_uid] = user.uid
       redirect_to top_main_path
     else
       render "error"
     end
+  end
+
+  def logout
+    session.delete(:login_uid)
+    redirect_to root_path
   end
 end

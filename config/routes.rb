@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get "top/main"
   post "top/login"
+  get 'top/logout'
   root "top#main"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
